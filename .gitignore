@@ -1,0 +1,33 @@
+# Because I'm ignorant, I decided don't ignore nothing to learn what wodpress change of my files, anyway I upload this file for (in future) have a good-practice
+# for ignoring things.
+
+# ignore everything in the root except the "wp-content" directory.
+#*
+#!/.gitignore
+#!/wp-content
+#!/wp-content/*
+
+# ignore everything in the "wp-content" directory, except:
+# "mu-plugins", "plugins", "themes" directory
+#wp-content/*
+#!wp-content/mu-plugins/
+#!wp-content/plugins/
+#!wp-content/themes/
+
+# ignore these plugins
+#wp-content/plugins/hello.php
+
+# ignore specific themes
+#wp-content/themes/twenty*/
+
+# ignore node dependency directories
+#node_modules/
+
+# ignore log files and databases
+#*.log
+#*.sql
+#*.sqlite
+
+# Ignore backups 
+
+wp-content/updraft
