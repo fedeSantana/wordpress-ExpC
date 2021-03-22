@@ -1,3 +1,7 @@
+const parser = new DOMParser();
+const xmlParse = (text) => parser.parseFromString(text, 'text/xml');
+const htmlParse = (text) => parser.parseFromString(text, 'text/html');
+
 const RSS_URL = `https://anchor.fm/s/2fe1f008/podcast/rss`;
 const podcasts = [];
 
@@ -15,7 +19,7 @@ const PODCAST_STATE = {
 }
 
 const ICONS = {
-  initial:  `
+  initial: `
     <button class="ilo-button ilo-button--outlined yourRippleEffectClass">
       <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
         <path id="arc1" fill="none" stroke="#0078D4" stroke-width="1.82"/>
@@ -28,7 +32,7 @@ const ICONS = {
     <path id="arc1" fill="none" stroke="#0078D4" stroke-width="1.82"/>
     <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4" />
   </svg>`,
-  cargando:`
+  cargando: `
   <button class="ilo-button ilo-button--outlined yourRippleEffectClass">
     <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="cargando podcast">
       <line x1="2" y1="11.5" x2="22" y2="11.5" stroke="#D0D0D0" />
@@ -38,31 +42,6 @@ const ICONS = {
     </svg>
     <span class="ilo-button__label">cargando</span>
   </button>`
-}
-
-class Order {
-  constructor(podcasts){
-    this.order = ORDER_STATE.oldFirst;
-    this.podcasts = podcasts;
-  }
-
-  oldFirst(){
-    if (this.order === ORDER_STATE.oldFirst){
-      return;
-    }
-
-    this.order = ORDER_STATE.oldFirst;
-    this.podcasts.reverse();
-  }
-
-  newFirst(){
-    if (this.order === ORDER_STATE.newFirst){
-      return;
-    }
-    this.order = ORDER_STATE.newFirst;
-    this.podcasts.reverse();
-  }
-
 }
 
 class PodcastState {
@@ -97,6 +76,42 @@ const podcastStateMaker = {
   finished: () => new PodcastState(PODCAST_STATE.finished),
 }
 
+class Player {
+  constructor() {
+  }
+}
+
+class Podcasts {
+  constructor() {
+    this.podcasts = [];
+    this.order = ORDER_STATE.oldFirst;
+  }
+  add(podcast) {
+    this.podcasts.add(podcast);
+  }
+
+  sort(how) {
+
+    if (how === this.order) {
+      return;
+    }
+
+    const availableSorts = [ORDER_STATE.newFirst, ORDER_STATE.oldFirst];
+
+    if (availableSorts.includes(how)) {
+      this.podcasts.reverse();
+      return;
+    }
+
+    console.warn("Podcasts.reorganize recive something wrong:", how);
+    return;
+  }
+
+  render() {
+    return this.podcasts.map(podcast => podcast.render())
+  }
+}
+
 class Podcast {
   constructor(title, description, date, artwork, link, duration, materialLink, time, number, state) {
     this.props = Object.freeze({
@@ -115,15 +130,11 @@ class Podcast {
     } else {
       this.state = podcastStateMaker[state](time);
     }
-
-
   }
 
   render() {
-    const container = document.getElementById("podcastsContainer");
-
-    container.insertAdjacentHTML("afterend",
-      `
+    return
+    `
       <div class="podcastCard" id="podcast${this.props.number}">
       <div class="podcastCard__artworkContainer">
         <img class="podcast__artwork" src="${this.props.artwork}" />
@@ -141,7 +152,7 @@ class Podcast {
             <div class="ilo-button__ripple contained"></div>
             <span class="ilo-button__label"> material docente </span>
           </button>
-          <button class="ilo-button ilo-button--outlined yourRippleEffectClass">
+          <button onclick="PodcastState.startPlaying(this, ${this.props})" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
             <div class="ilo-button__ripple"> </div>
             <span class="ilo-button__label"> ${this.state.time}</span>
           </button>
@@ -149,76 +160,93 @@ class Podcast {
       </div>
     </div>
       `
-    );
   }
 }
 
 
-function renderError(){
+function renderError() {
   const container = document.getElementById("podcastsContainer");
   container.insertAdjacentHTML("afterend", ` <h1> ¡Perdón! Tenemos algún problema y momentaneamente el sitio no se encuentra disponible </h1>`)
 }
 
+
+class PodcastingPlatform {
+  constructor(url) {
+    this.url = url;
+    this.podcasts = new Podcasts();
+    this.player = new Player();
+  }
+
+  getItems() {
+    new Promise((resolve, reject) => {
+      fetch(RSS_URL)
+      .then((response) => {
+        if (!response.ok) {
+          reject("Network response was not ok");
+        }
+        return response.text();
+      })
+      .then((str) => xmlParse(str))
+      .then((data) => {
+        const items = data.querySelectorAll("item");
+
+        const podcasts = items.map((item, index) => {
+          const title = item.querySelector("title").textContent;
+
+          const descriptionNode = htmlParse(item.querySelector("description").textContent);
+          const dateNode = item.querySelector("pubDate");
+
+          const description = descriptionNode.querySelector('strong')?.textContent ?? '';
+          const date = dayjs().to(dayjs(dateNode.textContent));
+
+          const image = item.querySelector("image");
+          const artwork = image.getAttribute("href");
+
+          const link = item.querySelector("enclosure");
+
+          let duration = item.querySelector("duration").innerHTML;
+          duration = Math.round(duration / 60);
+
+          const time = 2; // debería consultar la base de datos
+          const materialLink = null; // debería consultar la base de datos
+          const state = PODCAST_STATE.initial;
+
+          return new Podcast(
+            title,
+            description,
+            date,
+            artwork,
+            link,
+            duration,
+            materialLink,
+            time,
+            index,
+            state
+          );
+        });
+
+        resolve(podcasts);
+      })
+      .catch((error) => {
+        console.error("Hubo un error con la operacion fetch", error);
+        renderError();
+      });
+    })
+  }
+}
+
+
 /* FETCH */
-fetch(RSS_URL)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.text();
-  })
-  .then((str) => new window.DOMParser().parseFromString(str, "text/xml"))
-  .then((data) => {
-    const items = data.querySelectorAll("item");
 
-    items.forEach((item, index) => {
+// button Ripple Effect
 
-      const title = item.querySelector("title").textContent;
+// Wait until your DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function () {
 
-      let description = item.querySelector("description").textContent;
-      let temp = document.createElement('div');
-      temp.innerHTML = description;
+  podcastingPlatform = new PodcastingPlatform(RSS_URL);
 
-      description = temp.querySelector("strong");
-      if (!description) {
-        description = " ";
-      }
-      else {
-        description = description.textContent;
-      }
-
-      let date = item.querySelector("pubDate").innerHTML;
-
-      date = dayjs().to(dayjs(date));
-
-      const image = item.querySelector("image");
-      const artwork = image.getAttribute("href");
-
-      const link = item.querySelector("enclosure");
-
-      let duration = item.querySelector("duration").innerHTML;
-      duration = Math.round(duration / 60);
-
-      const time = 2; // debería consultar la base de datos
-      const materialLink = null; // debería consultar la base de datos
-      const state = PODCAST_STATE.initial;
-      podcasts.push(
-        new Podcast(
-          title, description, date, artwork, link, duration, materialLink, time, index, state
-        )
-      );
-    });
-
-    const order = new Order(podcasts);
-
-    order.newFirst();
-
-    podcasts.forEach( (podcast)=> {
-      podcast.render();
-    });
-
-  })
-  .catch((error) => {
-    console.error("Hubo un error con la operacion fetch", error);
-    renderError();
+  podcastingPlatform.getItems().then(podcasts => {
+    podcastingPlatform.podcasts = podcasts;
   });
+  
+})
