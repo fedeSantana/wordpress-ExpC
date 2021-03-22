@@ -14,6 +14,32 @@ const PODCAST_STATE = {
   finished: "finished",
 }
 
+const ICONS = {
+  initial:  `
+    <button class="ilo-button ilo-button--outlined yourRippleEffectClass">
+      <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
+        <path id="arc1" fill="none" stroke="#0078D4" stroke-width="1.82"/>
+        <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4" />
+      </svg>
+      <span class="ilo-button__label">enabled</span>
+    </button>`,
+  playing: `
+  <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24">
+    <path id="arc1" fill="none" stroke="#0078D4" stroke-width="1.82"/>
+    <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4" />
+  </svg>`,
+  cargando:`
+  <button class="ilo-button ilo-button--outlined yourRippleEffectClass">
+    <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="cargando podcast">
+      <line x1="2" y1="11.5" x2="22" y2="11.5" stroke="#D0D0D0" />
+      <line x1="2" y1="11.5" x2="4" y2="11.5" stroke="#0078D4">
+        <animate attributeType="XML" attributeName="x2" from="2" to="22" dur="2s" repeatCount="indefinite" />
+      </line>
+    </svg>
+    <span class="ilo-button__label">cargando</span>
+  </button>`
+}
+
 class Order {
   constructor(podcasts){
     this.order = ORDER_STATE.oldFirst;
@@ -96,7 +122,7 @@ class Podcast {
   render() {
     const container = document.getElementById("podcastsContainer");
 
-    podcastsContainer.insertAdjacentHTML("afterend",
+    container.insertAdjacentHTML("afterend",
       `
       <div class="podcastCard" id="podcast${this.props.number}">
       <div class="podcastCard__artworkContainer">
@@ -124,9 +150,13 @@ class Podcast {
     </div>
       `
     );
-
-
   }
+}
+
+
+function renderError(){
+  const container = document.getElementById("podcastsContainer");
+  container.insertAdjacentHTML("afterend", ` <h1> ¡Perdón! Tenemos algún problema y momentaneamente el sitio no se encuentra disponible </h1>`)
 }
 
 /* FETCH */
@@ -157,7 +187,9 @@ fetch(RSS_URL)
         description = description.textContent;
       }
 
-      const date = item.querySelector("pubDate").innerHTML;
+      let date = item.querySelector("pubDate").innerHTML;
+
+      date = dayjs().to(dayjs(date));
 
       const image = item.querySelector("image");
       const artwork = image.getAttribute("href");
@@ -177,7 +209,7 @@ fetch(RSS_URL)
       );
     });
 
-    order = new Order(podcasts);
+    const order = new Order(podcasts);
 
     order.newFirst();
 
@@ -188,4 +220,5 @@ fetch(RSS_URL)
   })
   .catch((error) => {
     console.error("Hubo un error con la operacion fetch", error);
+    renderError();
   });
