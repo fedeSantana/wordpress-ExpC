@@ -2,6 +2,116 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./components/PlayButton/PlayButton.js":
+/*!*********************************************!*\
+  !*** ./components/PlayButton/PlayButton.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ playButton)
+/* harmony export */ });
+/* harmony import */ var _parser_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../parser.js */ "./components/parser.js");
+/* harmony import */ var _podcast_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../podcast.js */ "./components/podcast.js");
+/* harmony import */ var _templates_initial_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./templates/initial.html */ "./components/PlayButton/templates/initial.html");
+/* harmony import */ var _templates_finished_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./templates/finished.html */ "./components/PlayButton/templates/finished.html");
+/* harmony import */ var _templates_playing_html__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./templates/playing.html */ "./components/PlayButton/templates/playing.html");
+
+
+
+
+
+
+
+//arcs with svg with rounded lines.
+
+function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+    var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+
+    return {
+        x: centerX + (radius * Math.cos(angleInRadians)),
+        y: centerY + (radius * Math.sin(angleInRadians))
+    };
+}
+
+class ArcIcon {
+    constructor(angle, size, radius) {
+        this.angle = angle;
+        this.size = size;
+        this.radius = radius;
+    }
+
+    describeArc(x, y, radius, startAngle, endAngle) {
+
+        var start = polarToCartesian(x, y, radius, endAngle);
+        var end = polarToCartesian(x, y, radius, startAngle);
+
+        var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+        var d = [
+            "M", start.x, start.y,
+            "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
+        ].join(" ");
+
+        return d;
+    }
+
+    render() {
+        return this.describeArc(this.size / 2, this.size / 2, 0, this.angle);
+    }
+}
+
+class playButton {
+    constructor(state) {
+        this.state = state;
+    }
+
+    render(number) {
+        const name = "playButtonContainer-" + number;
+        const playButton = document.createElement(name);
+        console.log("template_initial:", _templates_initial_html__WEBPACK_IMPORTED_MODULE_2__.default);
+
+        switch (this.state.status) {
+            case _podcast_js__WEBPACK_IMPORTED_MODULE_1__.PODCAST_STATE.initial:
+                playButton.insertAdjacentHTML( 'beforeend', _templates_initial_html__WEBPACK_IMPORTED_MODULE_2__.default );
+                break;
+            case _podcast_js__WEBPACK_IMPORTED_MODULE_1__.PODCAST_STATE.pause:
+            case _podcast_js__WEBPACK_IMPORTED_MODULE_1__.PODCAST_STATE.stopped:
+                const arc = ArcIcon(this.state.timeAngle, 24, 9.09);
+                const timeleft = "quedan " + this.state.timeleft + "minutos";
+
+                playButton.appendChild(
+                    (0,_parser_js__WEBPACK_IMPORTED_MODULE_0__.htmlParse)(
+                        `<button class="ilo-button ilo-button--outlined yourRippleEffectClass">
+                            <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
+                                ${arc}
+                                <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4"></path>
+                            </svg>
+                            <span class="ilo-button__label">${timeleft}</span>
+                        </button>`
+                    )
+                );
+                break;
+
+            case _podcast_js__WEBPACK_IMPORTED_MODULE_1__.PODCAST_STATE.playing:
+                playButton.appendChild((0,_parser_js__WEBPACK_IMPORTED_MODULE_0__.htmlParse)(_templates_playing_html__WEBPACK_IMPORTED_MODULE_4__.default));
+                break;
+
+            case _podcast_js__WEBPACK_IMPORTED_MODULE_1__.PODCAST_STATE.finished:
+                playButton.appendChild((0,_parser_js__WEBPACK_IMPORTED_MODULE_0__.htmlParse)(_templates_finished_html__WEBPACK_IMPORTED_MODULE_3__.default));
+                break;
+        }
+
+        console.log("holis", playButton);
+        return playButton.innerHTML;
+    }
+
+
+}
+
+/***/ }),
+
 /***/ "./components/parser.js":
 /*!******************************!*\
   !*** ./components/parser.js ***!
@@ -52,9 +162,12 @@ class Player {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PODCAST_STATE": () => (/* binding */ PODCAST_STATE),
-/* harmony export */   "default": () => (/* binding */ PodcastState)
+/* harmony export */   "PodcastState": () => (/* binding */ PodcastState),
+/* harmony export */   "default": () => (/* binding */ Podcast)
 /* harmony export */ });
 /* harmony import */ var _parser_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./parser.js */ "./components/parser.js");
+/* harmony import */ var _PlayButton_PlayButton_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayButton/PlayButton.js */ "./components/PlayButton/PlayButton.js");
+
 
 
 const PODCAST_STATE = {
@@ -66,9 +179,18 @@ const PODCAST_STATE = {
 }
 
 class PodcastState {
-    constructor(state, time) {
+    constructor(state, time, duration) {
         this._state = state;
         this.time = time;
+        this.duration = duration;
+    }
+
+    get timeLeft(){
+        return this.duration - this.time;
+    }
+
+    get timeAngle(){
+        return (this.time / this.duration) * 360;
     }
 
     get status() {
@@ -92,11 +214,6 @@ class PodcastState {
     }
 }
 
-const podcastStateMaker = {
-    initial: () => new PodcastState(PODCAST_STATE.initial),
-    finished: () => new PodcastState(PODCAST_STATE.finished),
-}
-
 class Podcast {
     constructor(title, description, date, artwork, link, duration, materialLink, time, number, state) {
         this.props = Object.freeze({
@@ -111,15 +228,16 @@ class Podcast {
         })
 
         if (state === PODCAST_STATE.finished) {
-            this.state = podcastStateMaker[PODCAST_STATE.finished]();
+            this.state = new PodcastState(PODCAST_STATE.finished, duration , duration);
         } else {
-            this.state = podcastStateMaker[state](time);
+            this.state = new PodcastState(PODCAST_STATE.initial, time , duration);
         }
+        
+        this.playButton = new _PlayButton_PlayButton_js__WEBPACK_IMPORTED_MODULE_1__.default(this.state);
     }
 
     render() {
-        return
-        `
+        return `
         <div class="podcastCard" id="podcast${this.props.number}">
         <div class="podcastCard__artworkContainer">
           <img class="podcast__artwork" src="${this.props.artwork}" />
@@ -137,10 +255,7 @@ class Podcast {
               <div class="ilo-button__ripple contained"></div>
               <span class="ilo-button__label"> material docente </span>
             </button>
-            <button onclick="PodcastState.startPlaying(this, ${this.props})" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
-            PodcastingPlatform     <div class="ilo-button__ripple"> </div>
-              <span class="ilo-button__label"> ${this.state.time}</span>
-            </button>
+            ${this.playButton.render(this.props.number)}
           </div>
         </div>
       </div>
@@ -223,8 +338,10 @@ class PodcastingPlatform {
               state
             );
           });
+
+          this.podcasts = new _podcasts_js__WEBPACK_IMPORTED_MODULE_1__.default(podcasts);
   
-          resolve(podcasts);
+          resolve();
         })
         .catch((error) => {
           console.error("Hubo un error con la operacion fetch", error);
@@ -265,8 +382,8 @@ const ORDER_STATE = {
 }
 
 class Podcasts {
-  constructor() {
-    this.podcasts = [];
+  constructor(podcasts=[]) {
+    this.podcasts = podcasts;
     this.order = ORDER_STATE.oldFirst;
   }
   add(podcast) {
@@ -291,6 +408,8 @@ class Podcasts {
   }
 
   render() {
+    console.log("podcasts.render()", this.podcasts);
+    
     return this.podcasts.map(podcast => podcast.render())
   }
 }
@@ -298,6 +417,57 @@ class Podcasts {
 
 
 
+
+/***/ }),
+
+/***/ "./components/PlayButton/templates/finished.html":
+/*!*******************************************************!*\
+  !*** ./components/PlayButton/templates/finished.html ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// Module
+var code = "<button class=\"ilo-button ilo-button--outlined yourRippleEffectClass\">\n    <svg class=\"ilo-button-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\">\n      <path fill-rule=\"evenodd\" clip-rule=\"evenodd\"\n        d=\"M12 20.1818C13.0745 20.1818 14.1384 19.9702 15.131 19.559C16.1237 19.1478 17.0257 18.5452 17.7854 17.7854C18.5452 17.0257 19.1478 16.1237 19.559 15.131C19.9702 14.1384 20.1818 13.0745 20.1818 12C20.1818 10.9255 19.9702 9.86162 19.559 8.86895C19.1478 7.87629 18.5452 6.97433 17.7854 6.21458C17.0257 5.45483 16.1237 4.85216 15.131 4.44099C14.1384 4.02981 13.0745 3.81818 12 3.81818C9.83005 3.81818 7.74897 4.68019 6.21458 6.21458C4.68019 7.74897 3.81818 9.83005 3.81818 12C3.81818 14.17 4.68019 16.251 6.21458 17.7854C7.74897 19.3198 9.83005 20.1818 12 20.1818V20.1818ZM12 22C17.5227 22 22 17.5227 22 12C22 6.47727 17.5227 2 12 2C6.47727 2 2 6.47727 2 12C2 17.5227 6.47727 22 12 22Z\"\n        fill=\"#D0D0D0\" />\n      <path d=\"M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z\" fill=\"#D0D0D0\" />\n      <circle cx=\"18\" cy=\"18\" r=\"6\" fill=\"white\" />\n      <path\n        d=\"M16.5 20.0852L14.765 18.3502C14.57 18.1552 14.255 18.1552 14.06 18.3502C13.865 18.5452 13.865 18.8602 14.06 19.0552L16.15 21.1452C16.345 21.3402 16.66 21.3402 16.855 21.1452L22.145 15.8552C22.34 15.6602 22.34 15.3452 22.145 15.1502C21.95 14.9552 21.635 14.9552 21.44 15.1502L16.5 20.0852Z\"\n        fill=\"#3F8F3D\" />\n    </svg>\n    <span class=\"ilo-button__label\">enabled</span>\n  </button>";
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (code);
+
+/***/ }),
+
+/***/ "./components/PlayButton/templates/initial.html":
+/*!******************************************************!*\
+  !*** ./components/PlayButton/templates/initial.html ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// Module
+var code = "<button class=\"ilo-button ilo-button--outlined yourRippleEffectClass\">\n    <svg class=\"ilo-button-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" aria-label=\"play podcast\">\n      <path id=\"arc1\" fill=\"none\" stroke=\"#0078D4\" stroke-width=\"1.82\" d=\"M 11.841357625485093 2.911384451028404 A 9.09 9.09 0 1 0 12 2.91\"></path>\n      <path d=\"M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z\" fill=\"#0078D4\"></path>\n    </svg>\n    <span class=\"ilo-button__label\">enabled</span>\n</button>";
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (code);
+
+/***/ }),
+
+/***/ "./components/PlayButton/templates/playing.html":
+/*!******************************************************!*\
+  !*** ./components/PlayButton/templates/playing.html ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// Module
+var code = "<button class=\"ilo-button ilo-button--outlined yourRippleEffectClass\">\n    <svg id=\"svgSound-playing0\" class=\"svgSound-playing\" style=\"display: block;\" height=\"24px\" stroke-width=\"4\" viewBox=\"-12 -12 24 24\">\n        <g jsname=\"HGYFec\">\n          <line class=\"leftLine\" x1=\"-6\" x2=\"-6\" y1=\"8\" y2=\"-8\"></line>\n          <line class=\"middleLine\" x1=\"0\" x2=\"0\" y1=\"8\" y2=\"-8\"></line>\n          <line class=\"rightLine\" x1=\"6\" x2=\"6\" y1=\"8\" y2=\"-8\"></line>\n        </g>\n    </svg>\n    <span class=\"ilo-button__label\"> reproduciendo </span>\n</button>\n";
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (code);
 
 /***/ })
 
@@ -378,16 +548,18 @@ __webpack_require__.r(__webpack_exports__);
 const RSS_URL = `https://anchor.fm/s/2fe1f008/podcast/rss`;
 const podcasts = [];
 
-
 // Wait until your DOM is fully loaded
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const podcastingPlatform = new _components_podcastingPlatform_js__WEBPACK_IMPORTED_MODULE_4__.default(RSS_URL);
-    console.log(podcastingPlatform);
   
-    podcastingPlatform.getItems().then(podcasts => {
-      podcastingPlatform.podcasts = podcasts;
-    });
-  })
+    const podcasts = await podcastingPlatform.getItems();
+
+    const podcastHTML = document.getElementById(`podcastsContainer`);
+    const renderOutput = document.createElement("podcasting-platform");
+    renderOutput.innerHTML = podcastingPlatform.podcasts.render();
+    podcastHTML.appendChild(renderOutput);
+
+})
 })();
 
 /******/ })()

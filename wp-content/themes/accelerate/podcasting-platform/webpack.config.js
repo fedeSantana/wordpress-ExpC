@@ -2,6 +2,14 @@ const path = require('path');
 
 module.exports = {
   devtool: false,
+  module: {
+    rules: [
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+    ]
+  },
   mode: 'development',
   entry: './index.js',
   output: {

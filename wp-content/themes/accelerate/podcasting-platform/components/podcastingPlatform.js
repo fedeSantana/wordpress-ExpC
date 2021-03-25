@@ -1,6 +1,6 @@
 import {xmlParse, htmlParse} from './parser.js'
 import Podcasts, { ORDER_STATE } from './podcasts.js'
-import Podcast, { PODCAST_STATE } from './podcast.js'
+import Podcast, { PodcastState, PODCAST_STATE } from './podcast.js'
 import Player from './player.js'
 
 export default class PodcastingPlatform {
@@ -57,8 +57,10 @@ export default class PodcastingPlatform {
               state
             );
           });
+
+          this.podcasts = new Podcasts(podcasts);
   
-          resolve(podcasts);
+          resolve();
         })
         .catch((error) => {
           console.error("Hubo un error con la operacion fetch", error);

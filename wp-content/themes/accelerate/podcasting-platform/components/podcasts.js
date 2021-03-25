@@ -1,5 +1,5 @@
 import {xmlParse, htmlParse} from './parser.js'
-import Podcast, { PODCAST_STATE } from './podcast.js'
+import Podcast, { PodcastState, PODCAST_STATE } from './podcast.js'
 import Player from './player.js'
 
 export const ORDER_STATE = {
@@ -8,8 +8,8 @@ export const ORDER_STATE = {
 }
 
 export default class Podcasts {
-  constructor() {
-    this.podcasts = [];
+  constructor(podcasts=[]) {
+    this.podcasts = podcasts;
     this.order = ORDER_STATE.oldFirst;
   }
   add(podcast) {
@@ -34,6 +34,8 @@ export default class Podcasts {
   }
 
   render() {
+    console.log("podcasts.render()", this.podcasts);
+    
     return this.podcasts.map(podcast => podcast.render())
   }
 }

@@ -7,13 +7,15 @@ import PodcastingPlatform from './components/podcastingPlatform.js'
 const RSS_URL = `https://anchor.fm/s/2fe1f008/podcast/rss`;
 const podcasts = [];
 
-
 // Wait until your DOM is fully loaded
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const podcastingPlatform = new PodcastingPlatform(RSS_URL);
-    console.log(podcastingPlatform);
   
-    podcastingPlatform.getItems().then(podcasts => {
-      podcastingPlatform.podcasts = podcasts;
-    });
-  })
+    const podcasts = await podcastingPlatform.getItems();
+
+    const podcastHTML = document.getElementById(`podcastsContainer`);
+    const renderOutput = document.createElement("podcasting-platform");
+    renderOutput.innerHTML = podcastingPlatform.podcasts.render();
+    podcastHTML.appendChild(renderOutput);
+
+})

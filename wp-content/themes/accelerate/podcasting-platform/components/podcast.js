@@ -1,4 +1,5 @@
 import {xmlParse, htmlParse} from './parser.js'
+import PlayButton from './PlayButton/PlayButton.js'
 
 export const PODCAST_STATE = {
     initial: "initial",
@@ -8,10 +9,19 @@ export const PODCAST_STATE = {
     finished: "finished",
 }
 
-export default class PodcastState {
-    constructor(state, time) {
+export class PodcastState {
+    constructor(state, time, duration) {
         this._state = state;
         this.time = time;
+        this.duration = duration;
+    }
+
+    get timeLeft(){
+        return this.duration - this.time;
+    }
+
+    get timeAngle(){
+        return (this.time / this.duration) * 360;
     }
 
     get status() {
@@ -35,12 +45,7 @@ export default class PodcastState {
     }
 }
 
-const podcastStateMaker = {
-    initial: () => new PodcastState(PODCAST_STATE.initial),
-    finished: () => new PodcastState(PODCAST_STATE.finished),
-}
-
-class Podcast {
+export default class Podcast {
     constructor(title, description, date, artwork, link, duration, materialLink, time, number, state) {
         this.props = Object.freeze({
             title: title,
@@ -54,15 +59,16 @@ class Podcast {
         })
 
         if (state === PODCAST_STATE.finished) {
-            this.state = podcastStateMaker[PODCAST_STATE.finished]();
+            this.state = new PodcastState(PODCAST_STATE.finished, duration , duration);
         } else {
-            this.state = podcastStateMaker[state](time);
+            this.state = new PodcastState(PODCAST_STATE.initial, time , duration);
         }
+        
+        this.playButton = new PlayButton(this.state);
     }
 
     render() {
-        return
-        `
+        return `
         <div class="podcastCard" id="podcast${this.props.number}">
         <div class="podcastCard__artworkContainer">
           <img class="podcast__artwork" src="${this.props.artwork}" />
@@ -80,10 +86,7 @@ class Podcast {
               <div class="ilo-button__ripple contained"></div>
               <span class="ilo-button__label"> material docente </span>
             </button>
-            <button onclick="PodcastState.startPlaying(this, ${this.props})" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
-            PodcastingPlatform     <div class="ilo-button__ripple"> </div>
-              <span class="ilo-button__label"> ${this.state.time}</span>
-            </button>
+            ${this.playButton.render(this.props.number)}
           </div>
         </div>
       </div>
