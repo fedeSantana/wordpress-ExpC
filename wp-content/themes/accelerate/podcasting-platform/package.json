@@ -12,6 +12,7 @@
     "@babel/core": "^7.13.10",
     "@babel/preset-env": "^7.13.12",
     "babel-loader": "^8.2.2",
+    "core-js": "^2.6.12",
     "html-loader": "^2.1.2",
     "url-loader": "^4.1.1",
     "webpack": "^5.28.0",
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "@babel/cli": "^7.13.10",
+    "@babel/plugin-syntax-jsx": "^7.12.13",
     "@babel/plugin-transform-react-jsx": "^7.13.12",
     "esm": "^3.2.25",
     "jsdom": "^16.5.1"

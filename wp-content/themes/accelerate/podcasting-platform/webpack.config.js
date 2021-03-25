@@ -9,20 +9,14 @@ module.exports = {
         loader: 'html-loader',
       },
       {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ["@babel/plugin-syntax-jsx"]
-          }
-        }
+        test: /\.js$/,
+        exclude: "/node_modules/",
+        use: ["babel-loader"]
       },
     ]
   },
   mode: 'development',
-  entry: './index.js',
+  entry: ['regenerator-runtime/runtime.js', './index.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
