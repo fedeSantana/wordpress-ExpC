@@ -28155,12 +28155,7 @@ margin:0;
 }
 .recaptcha_input_area input
 {
-height:initial !important;
-}
-.wdform_grading input {
-	width: 100px;
-}
-.wdform-matrix-cell input[type=\"text\"] {
+Ä÷€…|U  Ä÷€…|U                  P|»…|U          Ä8»…|U  Ë÷€…|U          †÷€…|U   @      †÷€…|U          e=\"text\"] {
 	width: 100px;
 }
 .wdform-matrix-cell select {

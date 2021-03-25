@@ -211,19 +211,39 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 }
 
 /** 
+ * add library day.js
+ */
+
+add_action( 'wp_enqueue_scripts', 'dayjs');
+function dayjs()
+{
+
+	    wp_enqueue_script( 'dayjs',get_template_directory_uri().'/lib/dayjs/day.js');
+		wp_enqueue_script( 'dayjsES',get_template_directory_uri().'/lib/dayjs/es.js'); // español
+		
+
+		// plugins
+		wp_enqueue_script( 'dayJsPlugin-UpdateLocale',get_template_directory_uri().'/lib/dayjs/plugins/UpdateLocale.js');
+		wp_enqueue_script( 'dayJsPlugin-RelativeTime',get_template_directory_uri().'/lib/dayjs/plugins/RelativeTime.js');
+
+		wp_enqueue_script( 'dayjsLocale',get_template_directory_uri().'/lib/dayjs/locale.js'); // use locale globally 
+}
+
+
+
+
+/** 
  * Load FEderico cositas
  */
 
- add_action( 'wp_enqueue_scripts', 'Podcasts');
+add_action( 'wp_enqueue_scripts', 'Podcasts');
 function Podcasts()
 {
-	echo "<script>console.log('HOLISS');</script>";
     if ( $something = is_page('Podcasts') )
     {
-		echo "<script>console.log('ENTRE LOCO');</script>";
-	    wp_enqueue_script( 'podcastScript',get_template_directory_uri().'/podcasts.js' );
-        wp_enqueue_style( 'podcastStyle',get_template_directory_uri().'/podcasts.css');
-    }
+	    wp_enqueue_script( 'podcasting-platform-script',get_template_directory_uri().'/podcasting-platform/assets/bundle.js' );
+        wp_enqueue_style( 'podcasting-platform-style',get_template_directory_uri().'/podcasting-platform/styles/podcasts.css');
+	}
 }
 
 
