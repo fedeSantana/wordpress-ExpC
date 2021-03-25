@@ -4,7 +4,6 @@ import template_initial from './templates/initial.html';
 import template_finished from './templates/finished.html';
 import template_playing from './templates/playing.html';
 
-
 //arcs with svg with rounded lines.
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
