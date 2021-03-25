@@ -241,7 +241,7 @@ function Podcasts()
 {
     if ( $something = is_page('Podcasts') )
     {
-	    wp_enqueue_script( 'podcasting-platform-script',get_template_directory_uri().'/podcasting-platform/assets/bundle.js' );
+	    wp_enqueue_script( 'podcasting-platform-script',get_template_directory_uri().'/podcasting-platform/dist/bundle.js' );
         wp_enqueue_style( 'podcasting-platform-style',get_template_directory_uri().'/podcasting-platform/styles/podcasts.css');
 	}
 }
