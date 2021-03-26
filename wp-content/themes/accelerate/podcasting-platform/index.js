@@ -14,8 +14,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const podcasts = await podcastingPlatform.getItems();
 
     const podcastHTML = document.getElementById(`podcastsContainer`);
-    const renderOutput = document.createElement("podcasting-platform");
+    
+    const renderOutput = document.createElement("podcasting-platform-podcasts");
+
     renderOutput.innerHTML = podcastingPlatform.podcasts.render();
+    
     podcastHTML.appendChild(renderOutput);
+    podcastHTML.appendChild(podcastingPlatform.player.render());
+
 
 })
