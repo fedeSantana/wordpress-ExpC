@@ -40,9 +40,9 @@ export default class PodcastingPlatform {
             let duration = item.querySelector("duration").innerHTML;
             duration = Math.round(duration / 60);
   
-            const time = 2; // debería consultar la base de datos
+            const time = 15; // debería consultar la base de datos
             const materialLink = null; // debería consultar la base de datos
-            const state = PODCAST_STATE.initial;
+            const state = PODCAST_STATE.stopped;
   
             return new Podcast(
               title,

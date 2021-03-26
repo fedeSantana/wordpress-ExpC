@@ -17,6 +17,7 @@ export class PodcastState {
     }
 
     get timeLeft(){
+        console.log("timeleft:", this.duration - this.time)
         return this.duration - this.time;
     }
 
@@ -58,12 +59,8 @@ export default class Podcast {
             number: number,
         })
 
-        if (state === PODCAST_STATE.finished) {
-            this.state = new PodcastState(PODCAST_STATE.finished, duration , duration);
-        } else {
-            this.state = new PodcastState(PODCAST_STATE.initial, time , duration);
-        }
-        
+        this.state = new PodcastState(state, time , duration);
+
         this.playButton = new PlayButton(this.state);
     }
 

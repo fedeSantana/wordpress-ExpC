@@ -29,9 +29,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
- //arcs with svg with rounded lines.
-//const test = (<div><p>Prueba</p></div>);
-//console.log(test);
+
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -56,18 +54,119 @@ var ArcIcon = /*#__PURE__*/function () {
       var start = polarToCartesian(x, y, radius, endAngle);
       var end = polarToCartesian(x, y, radius, startAngle);
       var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-      var d = ["M", start.x, start.y, "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(" ");
-      return d;
+      console.log("startAngle", startAngle, "endAngle", endAngle);
+      var d = "M ".concat(start.x, " ").concat(start.y, " A ").concat(radius, " ").concat(radius, " 0 ").concat(largeArcFlag, " 0 ").concat(end.x, " ").concat(end.y);
+      var output = (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+        id: "arc1",
+        fill: "none",
+        stroke: "#0078D4",
+        "stroke-width": "1.82",
+        d: d
+      });
+      return output;
+      /*
+      return ("M", { start.x },)
+      var d = [
+          "M", start.x, start.y,
+          "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
+      ].join(" ");
+       return d;
+      */
     }
   }, {
     key: "render",
     value: function render() {
-      return this.describeArc(this.size / 2, this.size / 2, 0, this.angle);
+      return this.describeArc(this.size / 2, this.size / 2, 9.09, 0, this.angle);
     }
   }]);
 
   return ArcIcon;
 }();
+
+var ICONS = {
+  initial: (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("svg", {
+    "class": "ilo-button-icon",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    "aria-label": "play podcast"
+  }, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+    id: "arc1",
+    fill: "none",
+    stroke: "#0078D4",
+    "stroke-width": "1.82",
+    d: "M 11.841357625485093 2.911384451028404 A 9.09 9.09 0 1 0 12 2.91"
+  }), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+    d: "M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z",
+    fill: "#0078D4"
+  })),
+  playing: (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("svg", {
+    id: "svgSound-playing0",
+    "class": "svgSound-playing",
+    style: "display: block;",
+    height: "24px",
+    "stroke-width": "4",
+    viewBox: "-12 -12 24 24"
+  }, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("g", {
+    jsname: "HGYFec"
+  }, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("line", {
+    "class": "leftLine",
+    x1: "-6",
+    x2: "-6",
+    y1: "8",
+    y2: "-8"
+  }), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("line", {
+    "class": "middleLine",
+    x1: "0",
+    x2: "0",
+    y1: "8",
+    y2: "-8"
+  }), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("line", {
+    "class": "rightLine",
+    x1: "6",
+    x2: "6",
+    y1: "8",
+    y2: "-8"
+  }))),
+  finished: (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("svg", {
+    "class": "ilo-button-icon",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M12 20.1818C13.0745 20.1818 14.1384 19.9702 15.131 19.559C16.1237 19.1478 17.0257 18.5452 17.7854 17.7854C18.5452 17.0257 19.1478 16.1237 19.559 15.131C19.9702 14.1384 20.1818 13.0745 20.1818 12C20.1818 10.9255 19.9702 9.86162 19.559 8.86895C19.1478 7.87629 18.5452 6.97433 17.7854 6.21458C17.0257 5.45483 16.1237 4.85216 15.131 4.44099C14.1384 4.02981 13.0745 3.81818 12 3.81818C9.83005 3.81818 7.74897 4.68019 6.21458 6.21458C4.68019 7.74897 3.81818 9.83005 3.81818 12C3.81818 14.17 4.68019 16.251 6.21458 17.7854C7.74897 19.3198 9.83005 20.1818 12 20.1818V20.1818ZM12 22C17.5227 22 22 17.5227 22 12C22 6.47727 17.5227 2 12 2C6.47727 2 2 6.47727 2 12C2 17.5227 6.47727 22 12 22Z",
+    fill: "#D0D0D0"
+  }), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+    d: "M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z",
+    fill: "#D0D0D0"
+  }), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("circle", {
+    cx: "18",
+    cy: "18",
+    r: "6",
+    fill: "white"
+  }), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+    d: "M16.5 20.0852L14.765 18.3502C14.57 18.1552 14.255 18.1552 14.06 18.3502C13.865 18.5452 13.865 18.8602 14.06 19.0552L16.15 21.1452C16.345 21.3402 16.66 21.3402 16.855 21.1452L22.145 15.8552C22.34 15.6602 22.34 15.3452 22.145 15.1502C21.95 14.9552 21.635 14.9552 21.44 15.1502L16.5 20.0852Z",
+    fill: "#3F8F3D"
+  })),
+  pause: function pause(angle, size, diameter) {
+    var arc = new ArcIcon(angle, size, diameter);
+    console.log("arc.render():", arc.render());
+    return (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("svg", {
+      "class": "ilo-button-icon",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      "aria-label": "play podcast"
+    }, arc.render(), (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("path", {
+      d: "M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z",
+      fill: "#0078D4"
+    })); // ...is what `this` is here.
+  }
+};
 
 var playButton = /*#__PURE__*/function () {
   function playButton(state) {
@@ -79,40 +178,50 @@ var playButton = /*#__PURE__*/function () {
   _createClass(playButton, [{
     key: "render",
     value: function render(number) {
-      var name = "playButtonContainer-" + number;
+      var _playButton;
 
-      var _playButton = document.createElement(name);
-
-      console.log("template_initial:", _templates_initial_html__WEBPACK_IMPORTED_MODULE_3__.default);
+      console.log("state:", this.state.status);
 
       switch (this.state.status) {
         case _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.initial:
-          _playButton.insertAdjacentHTML('beforeend', _templates_initial_html__WEBPACK_IMPORTED_MODULE_3__.default);
-
+          _playButton = (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("button", {
+            "class": "ilo-button ilo-button--outlined yourRippleEffectClass",
+            "aria-label": "play podcast"
+          }, ICONS.initial, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("span", {
+            "class": "ilo-button__label"
+          }, " ", this.state.duration, " minutos"));
           break;
 
         case _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.pause:
         case _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.stopped:
-          var arc = ArcIcon(this.state.timeAngle, 24, 9.09);
-          var timeleft = "quedan " + this.state.timeleft + "minutos";
-
-          _playButton.appendChild((0,_parser_js__WEBPACK_IMPORTED_MODULE_1__.htmlParse)("<button class=\"ilo-button ilo-button--outlined yourRippleEffectClass\">\n                            <svg class=\"ilo-button-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" aria-label=\"play podcast\">\n                                ".concat(arc, "\n                                <path d=\"M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z\" fill=\"#0078D4\"></path>\n                            </svg>\n                            <span class=\"ilo-button__label\">").concat(timeleft, "</span>\n                        </button>")));
-
+          console.log("this.state.timeAngle", this.state.timeAngle);
+          var icon = ICONS.pause(this.state.timeAngle, 24, 9.09);
+          _playButton = (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("button", {
+            "class": "ilo-button ilo-button--outlined yourRippleEffectClass",
+            "aria-label": "play podcast"
+          }, icon, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("span", {
+            "class": "ilo-button__label"
+          }, " quedan ", this.state.timeLeft, " minutos"));
           break;
 
         case _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.playing:
-          _playButton.appendChild((0,_parser_js__WEBPACK_IMPORTED_MODULE_1__.htmlParse)(_templates_playing_html__WEBPACK_IMPORTED_MODULE_5__.default));
-
+          _playButton = (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("button", {
+            "class": "ilo-button ilo-button--outlined yourRippleEffectClass"
+          }, ICONS.playing, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("span", {
+            "class": "ilo-button__label"
+          }, " reproduciendo "));
           break;
 
         case _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.finished:
-          _playButton.appendChild((0,_parser_js__WEBPACK_IMPORTED_MODULE_1__.htmlParse)(_templates_finished_html__WEBPACK_IMPORTED_MODULE_4__.default));
-
+          _playButton = (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("button", {
+            "class": "ilo-button ilo-button--outlined yourRippleEffectClass"
+          }, ICONS.finished, (0,_utils_createElement_js__WEBPACK_IMPORTED_MODULE_0__.default)("span", {
+            "class": "ilo-button__label"
+          }, " Finalizado "));
           break;
       }
 
-      console.log("holis", _playButton);
-      return _playButton.innerHTML;
+      return _playButton.outerHTML;
     }
   }]);
 
@@ -214,6 +323,7 @@ var PodcastState = /*#__PURE__*/function () {
   _createClass(PodcastState, [{
     key: "timeLeft",
     get: function get() {
+      console.log("timeleft:", this.duration - this.time);
       return this.duration - this.time;
     }
   }, {
@@ -265,13 +375,7 @@ var Podcast = /*#__PURE__*/function () {
       link: link,
       number: number
     });
-
-    if (state === PODCAST_STATE.finished) {
-      this.state = new PodcastState(PODCAST_STATE.finished, duration, duration);
-    } else {
-      this.state = new PodcastState(PODCAST_STATE.initial, time, duration);
-    }
-
+    this.state = new PodcastState(state, time, duration);
     this.playButton = new _PlayButton_PlayButton_js__WEBPACK_IMPORTED_MODULE_1__.default(this.state);
   }
 
@@ -366,11 +470,11 @@ var PodcastingPlatform = /*#__PURE__*/function () {
             var link = item.querySelector("enclosure");
             var duration = item.querySelector("duration").innerHTML;
             duration = Math.round(duration / 60);
-            var time = 2; // debería consultar la base de datos
+            var time = 15; // debería consultar la base de datos
 
             var materialLink = null; // debería consultar la base de datos
 
-            var state = _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.initial;
+            var state = _podcast_js__WEBPACK_IMPORTED_MODULE_2__.PODCAST_STATE.stopped;
             return new _podcast_js__WEBPACK_IMPORTED_MODULE_2__.default(title, description, date, artwork, link, duration, materialLink, time, index, state);
           });
 
@@ -512,16 +616,29 @@ function createElement(tag, props) {
         name = _ref2[0],
         value = _ref2[1];
 
-    if (name.startsWith('on') && name.toLowerCase() in window) element.addEventListener(name.toLowerCase().substr(2), value);else element.setAttribute(name, value.toString());
+    if (name.startsWith('on') && name.toLowerCase() in window) element.addEventListener(name.toLowerCase().substr(2), value);else if (name.startsWith('$') && name.toLowerCase() in window) {
+      console.log("name:", name);
+      element.setAttribute(name, value.toString());
+    } else element.setAttribute(name, value.toString());
   });
 
   for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
     children[_key - 2] = arguments[_key];
   }
 
-  children.forEach(function (child) {
-    appendChild(element, child);
-  });
+  console.log("children", children);
+
+  if (children.length > 0) {
+    children.forEach(function (child) {
+      if (child != undefined) {
+        appendChild(element, child);
+      } else {
+        appendChild(element, "undefined");
+      }
+    });
+  }
+
+  ;
   return element;
 }
 
