@@ -1,9 +1,6 @@
 import createElement from '../utils/createElement.js'
 import { xmlParse, htmlParse } from '../parser.js'
 import Podcast, { PodcastState, PODCAST_STATE } from '../podcast.js'
-import template_initial from './templates/initial.html';
-import template_finished from './templates/finished.html';
-import template_playing from './templates/playing.html';
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
