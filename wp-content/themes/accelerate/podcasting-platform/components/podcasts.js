@@ -1,6 +1,8 @@
 import {xmlParse, htmlParse} from './parser.js'
+import createElement from './utils/createElement.js'
 import Podcast, { PodcastState, PODCAST_STATE } from './podcast.js'
 import Player from './player.js'
+
 
 export const ORDER_STATE = {
   newFirst: "newFirst",
@@ -34,9 +36,7 @@ export default class Podcasts {
   }
 
   render() {
-    console.log("podcasts.render()", this.podcasts);
-    
-    return this.podcasts.map(podcast => podcast.render())
+    return this.podcasts.map(podcast => podcast.render());
   }
 }
 

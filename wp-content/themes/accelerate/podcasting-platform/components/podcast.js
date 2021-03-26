@@ -1,4 +1,5 @@
 import {xmlParse, htmlParse} from './parser.js'
+import createElement from './utils/createElement.js'
 import PlayButton from './PlayButton/PlayButton.js'
 
 export const PODCAST_STATE = {
@@ -17,7 +18,6 @@ export class PodcastState {
     }
 
     get timeLeft(){
-        console.log("timeleft:", this.duration - this.time)
         return this.duration - this.time;
     }
 

@@ -24,7 +24,6 @@ class ArcIcon {
         const end = polarToCartesian(x, y, radius, startAngle);
 
         const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-        console.log("startAngle", startAngle, "endAngle", endAngle);
         const d = `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
 
         const output = (
@@ -83,7 +82,6 @@ const ICONS = {
 
     pause: (angle, size, diameter) => {
         const arc = new ArcIcon(angle, size, diameter);
-        console.log("arc.render():", arc.render());
         return (
             <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
                 {arc.render()}
@@ -99,7 +97,6 @@ export default class playButton {
 
     render(number) {
         let playButton;
-        console.log("state:", this.state.status);
         switch (this.state.status) {
 
             case PODCAST_STATE.initial:
@@ -111,7 +108,6 @@ export default class playButton {
                 break;
             case PODCAST_STATE.pause:
             case PODCAST_STATE.stopped:
-                console.log("this.state.timeAngle", this.state.timeAngle);
                 const icon = ICONS.pause(this.state.timeAngle, 24, 9.09);
                 playButton = (
                     <button class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">

@@ -14,14 +14,12 @@ export default function createElement(tag, props, ...children) {
 		if (name.startsWith('on') && name.toLowerCase() in window)
 			element.addEventListener(name.toLowerCase().substr(2), value)
 		else if (name.startsWith('$') && name.toLowerCase() in window) {
-			console.log("name:", name);
 			element.setAttribute(name, value.toString());
 		}
 		else element.setAttribute(name, value.toString())
 
 
 	})
-	console.log("children", children);
 	if (children.length > 0) {
 		children.forEach((child) => {
 			if (child != undefined) {
