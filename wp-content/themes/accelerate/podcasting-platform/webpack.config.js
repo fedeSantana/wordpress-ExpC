@@ -12,25 +12,25 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: "/node_modules/",
-        use: ["babel-loader"]
+        exclude: '/node_modules/',
+        use: ['babel-loader', 'eslint-loader'],
       },
-      // Images      
+      // Images
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
         type: 'asset/resource',
       },
       // Svgs
-      { 
-        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, 
-        type: 'asset/inline', 
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        type: 'asset/inline',
       },
-    ]
+    ],
   },
   mode: 'development',
-  entry: ['regenerator-runtime/runtime.js', './index.js'],
+  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-  }
+  },
 };
