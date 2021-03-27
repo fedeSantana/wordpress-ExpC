@@ -5,7 +5,9 @@ import backTen_svg from '../assets/inline/backTen.svg'
 import play_svg from '../assets/inline/play.svg'
 import forwardTen_svg from '../assets/inline/forwardTen.svg'
 
-
+/**
+ * 
+ */
 export default class Player {
   constructor(podcast) {
     this.podcast = podcast;
@@ -14,7 +16,10 @@ export default class Player {
   update(podcast) {
     this.podcat = podcast;
   }
-
+  /**
+   * 
+   * @returns 
+   */
   render() {
     return (
     <div class="ilo-player">

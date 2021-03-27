@@ -4,13 +4,19 @@ import Podcasts, { ORDER_STATE } from './podcasts.js'
 import Podcast, { PodcastState, PODCAST_STATE } from './podcast.js'
 import Player from './player.js'
 
+/**
+ * element
+ */
 export default class PodcastingPlatform {
     constructor(url) {
       this.url = url;
       this.podcasts = new Podcasts();
       this.player = new Player();
     }
-  
+    /**
+     * 
+     * @returns {Promise} Promise object with fetch data
+     */
     getItems() {
       return new Promise((resolve, reject) => {
         fetch(this.url)
@@ -43,7 +49,7 @@ export default class PodcastingPlatform {
   
             const time = 15; // debería consultar la base de datos
             const materialLink = null; // debería consultar la base de datos
-            const state = PODCAST_STATE.stopped;
+            const state = PODCAST_STATE.initial;
   
             return new Podcast(
               title,
