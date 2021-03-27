@@ -36,7 +36,7 @@ export default class Podcasts {
   }
 
   render() {
-    return this.podcasts.map(podcast => podcast.render());
+    return (<div>{this.podcasts.map(podcast => podcast.render())}</div>);
   }
 }
 
