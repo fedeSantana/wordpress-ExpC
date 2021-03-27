@@ -1,0 +1,20 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+        "airbnb"
+    ],
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "react/jsx-filename-extension": "off",
+        "no-console": "off"
+    },
+    "settings": {
+        "react": {
+            "createClass": "createElement", // Regex for Component Factory to use,
+            // default to "createReactClass"
+            "pragma": "createElement" // Pragma to use, default to "React"
+        }
+    }
+}
