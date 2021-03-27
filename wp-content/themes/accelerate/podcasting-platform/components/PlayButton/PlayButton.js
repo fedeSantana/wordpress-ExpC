@@ -2,7 +2,16 @@ import createElement from '../utils/createElement.js'
 import { xmlParse, htmlParse } from '../parser.js'
 import Podcast, { PodcastState, PODCAST_STATE } from '../podcast.js'
 
+/**
+ * 
+ * @param {!number} centerX centro de la circunferencia en X
+ * @param {!number} centerY centro de la circunferencia en Y
+ * @param {!number} radius radio de la circunferencia
+ * @param {!number} angleInDegrees angulo en grados
+ * @returns {{x: number, y: number}} coordenates
+ */
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+    /** @type {(number)} */
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
 
     return {
@@ -11,21 +20,41 @@ function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     };
 }
 
+/**
+ * Icon for PlayButton with a fragment of a Arc, representing de percent of the podcast listen.
+ * @constructor
+ * @param {!number} angle - angle from 0 to 359.
+ * @param {!number} size - The size of the element
+ * @param {!number} radius - The radius of the circunference
+ */
 class ArcIcon {
     constructor(angle, size, radius) {
         this.angle = angle;
         this.size = size;
         this.radius = radius;
     }
+    /**
+     * 
+     * @param {!number} x - posición en X respecto el centro
+     * @param {!number} y - posicion en Y respecto el centro
+     * @param {!number} radius - radio de la circunferencia
+     * @param {!number} startAngle - Angulo inicial del arco
+     * @param {!number} endAngle - Angulo final del arco 
+     * @returns {Element} arc - <path> del svg que representa el arco
+     */
 
     describeArc(x, y, radius, startAngle, endAngle) {
 
         const start = polarToCartesian(x, y, radius, endAngle);
         const end = polarToCartesian(x, y, radius, startAngle);
 
+        /** @type {string} */
         const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+        /** @type {string} */
         const d = `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
 
+        /** @type {Element} */
         const output = (
             <path 
             id="arc1"
@@ -36,29 +65,35 @@ class ArcIcon {
             </path>);
 
         return output;
-        /*
-        return ("M", { start.x },)
-        var d = [
-            "M", start.x, start.y,
-            "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
-        ].join(" ");
 
-        return d;
-        */
     }
-
+    /**
+     * 
+     * @returns {Element}
+     */
     render() {
         return this.describeArc(this.size / 2, this.size / 2, 9.09,  0, this.angle);
     }
 }
 
+/**
+ * @type {Element}
+ * @description Object with the Icons from playButton
+ */
 const ICONS = {
+    /**
+     * @type {Element}
+     * @description Una circunferencia con un triangulo en medio, representa que al clickear se reproducirá
+     */
     initial: (
         <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
             <path id="arc1" fill="none" stroke="#0078D4" stroke-width="1.82" d="M 11.841357625485093 2.911384451028404 A 9.09 9.09 0 1 0 12 2.91"></path>
             <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4"></path>
         </svg>),
-
+    /**
+     * @type {Element}
+     * @description Tres barras animadas que representan el sonido reproduciendosé
+     */
     playing: (
         <svg id="svgSound-playing0" class="svgSound-playing" style="display: block;" height="24px" stroke-width="4" viewBox="-12 -12 24 24">
             <g jsname="HGYFec">
@@ -67,6 +102,10 @@ const ICONS = {
                 <line class="rightLine" x1="6" x2="6" y1="8" y2="-8"></line>
             </g>
         </svg>),
+    /**
+     * @type {Element}
+     * @description Similar al estado inicial, pero con un color gris y un check verde que simboliza su finalización
+     */
     finished: (
         <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -79,7 +118,14 @@ const ICONS = {
                 d="M16.5 20.0852L14.765 18.3502C14.57 18.1552 14.255 18.1552 14.06 18.3502C13.865 18.5452 13.865 18.8602 14.06 19.0552L16.15 21.1452C16.345 21.3402 16.66 21.3402 16.855 21.1452L22.145 15.8552C22.34 15.6602 22.34 15.3452 22.145 15.1502C21.95 14.9552 21.635 14.9552 21.44 15.1502L16.5 20.0852Z"
                 fill="#3F8F3D" />
         </svg>),
-
+    /**
+     * 
+     * @param {!number} angle - angle from 0 to 359.
+     * @param {!number} size - The size of the element
+     * @param {!number} diameter - The radius of the circunference
+     * 
+     * @returns {Element}
+     */
     pause: (angle, size, diameter) => {
         const arc = new ArcIcon(angle, size, diameter);
         return (
@@ -90,16 +136,24 @@ const ICONS = {
     }
 }
 
+
 export default class playButton {
     constructor(state) {
         this.state = state;
     }
-
+    /**
+     * 
+     * @param {!number} number 
+     * @returns {Element}
+     */
     render(number) {
         let playButton;
-        switch (this.state.status) {
+        console.log("icons.initial:", ICONS.initial);
+        console.log("state:",this.state.status);
 
+        switch (this.state.status) {
             case PODCAST_STATE.initial:
+                console.log("state is initial");
                 playButton = (
                     <button class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
                         {ICONS.initial}
@@ -134,9 +188,12 @@ export default class playButton {
                     </button>
                 );
                 break;
+            
         }
 
-        return playButton.outerHTML;
+        console.log("playButton goes out like:", playButton);
+
+        return playButton;
     }
 
 
