@@ -1,7 +1,12 @@
+function isSVG(element) {
+  const patt = new RegExp(`^${element}$`, 'i');
+  const SVGTags = ['path', 'svg', 'use', 'g'];
+  return SVGTags.some((tag) => patt.test(tag));
+}
+
 /**
- *
- * @param {*} parent
- * @param {*} child
+ * @param {Element} parent
+ * @param {Element} child
  */
 const appendChild = (parent, child) => {
   if (Array.isArray(child)) child.forEach((nestedChild) => appendChild(parent, nestedChild));
@@ -13,13 +18,15 @@ const appendChild = (parent, child) => {
 };
 /**
  *
- * @param {*} tag
+ * @param {string} tag
  * @param {*} props
- * @param  {...any} children
+ * @param  {Element[]} children
  * @returns {Element}
  */
 export default function createElement(tag, props, ...children) {
-  const element = document.createElement(tag);
+  const element = isSVG(tag)
+    ? document.createElementNS('http://www.w3.org/2000/svg', tag)
+    : document.createElement(tag);
 
   Object.entries(props || {}).forEach(([name, value]) => {
     if (name.startsWith('on') && name.toLowerCase() in window) element.addEventListener(name.toLowerCase().substr(2), value);
