@@ -236,14 +236,14 @@ function dayjs()
  * Load FEderico cositas
  */
 
- add_action( 'wp_enqueue_scripts', 'Podcasts');
+add_action( 'wp_enqueue_scripts', 'Podcasts');
 function Podcasts()
 {
     if ( $something = is_page('Podcasts') )
     {
-	    wp_enqueue_script( 'podcastScript',get_template_directory_uri().'/podcasts.js' );
-        wp_enqueue_style( 'podcastStyle',get_template_directory_uri().'/podcasts.css');
-    }
+	    wp_enqueue_script( 'podcasting-platform-script',get_template_directory_uri().'/podcasting-platform/dist/bundle.js' );
+        wp_enqueue_style( 'podcasting-platform-style',get_template_directory_uri().'/podcasting-platform/styles/podcasts.css');
+	}
 }
 
 

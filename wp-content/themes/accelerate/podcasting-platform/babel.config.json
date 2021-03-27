@@ -1,0 +1,20 @@
+{
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": "2.0"
+        }
+      ]
+    ],
+    "plugins": [
+      "@babel/syntax-jsx",
+      [
+        "@babel/transform-react-jsx",
+        {
+          "pragma": "createElement"
+        }
+      ]
+    ]
+  }
