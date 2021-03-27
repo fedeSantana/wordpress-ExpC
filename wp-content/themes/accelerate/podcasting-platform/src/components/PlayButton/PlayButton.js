@@ -12,7 +12,7 @@ const ICONS = {
      * @description icono de reproducción
      */
   initial: (
-    <svg className="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
+    <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
       <path id="arc1" fill="none" stroke="#0078D4" strokeWidth="1.82" d="M 11.841357625485093 2.911384451028404 A 9.09 9.09 0 1 0 12 2.91" />
       <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4" />
     </svg>),
@@ -21,11 +21,11 @@ const ICONS = {
      * @description Tres barras animadas que representan el sonido reproduciendosé
      */
   playing: (
-    <svg id="svgSound-playing0" className="svgSound-playing" height="24px" strokeWidth="4" viewBox="-12 -12 24 24">
+    <svg id="svgSound-playing0" class="svgSound-playing" height="24px" strokeWidth="4" viewBox="-12 -12 24 24">
       <g jsname="HGYFec">
-        <line className="leftLine" x1="-6" x2="-6" y1="8" y2="-8" />
-        <line className="middleLine" x1="0" x2="0" y1="8" y2="-8" />
-        <line className="rightLine" x1="6" x2="6" y1="8" y2="-8" />
+        <line class="leftLine" x1="-6" x2="-6" y1="8" y2="-8" />
+        <line class="middleLine" x1="0" x2="0" y1="8" y2="-8" />
+        <line class="rightLine" x1="6" x2="6" y1="8" y2="-8" />
       </g>
     </svg>),
   /**
@@ -34,7 +34,7 @@ const ICONS = {
      */
   finished: (
     <svg
-      className="ilo-button-icon"
+      class="ilo-button-icon"
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -65,7 +65,7 @@ const ICONS = {
   pause: (angle, size, diameter) => {
     const arc = new ArcIcon(angle, size, diameter);
     return (
-      <svg className="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
+      <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
         {arc.render()}
         <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4" />
       </svg>
@@ -87,9 +87,9 @@ export default class PlayButton {
     switch (this.state.status) {
       case PODCAST_STATE.initial:
         return (
-          <button id={`playButton-${number}`} type="button" className="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
+          <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
             {ICONS.initial}
-            <span className="ilo-button__label">
+            <span class="ilo-button__label">
               {' '}
               {this.state.duration}
               {' '}
@@ -100,9 +100,9 @@ export default class PlayButton {
       case PODCAST_STATE.pause:
       case PODCAST_STATE.stopped:
         return (
-          <button id={`playButton-${number}`} type="button" className="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
+          <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
             {ICONS.pause(this.state.timeAngle, 24, 9.09)}
-            <span className="ilo-button__label">
+            <span class="ilo-button__label">
               {' '}
               quedan
               {this.state.timeLeft}
@@ -114,25 +114,25 @@ export default class PlayButton {
 
       case PODCAST_STATE.playing:
         return (
-          <button id={`playButton-${number}`} type="button" className="ilo-button ilo-button--outlined yourRippleEffectClass">
+          <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass">
             {ICONS.playing}
-            <span className="ilo-button__label"> reproduciendo </span>
+            <span class="ilo-button__label"> reproduciendo </span>
           </button>
         );
 
       case PODCAST_STATE.finished:
         return (
-          <button id={`playButton-${number}`} type="button" className="ilo-button ilo-button--outlined yourRippleEffectClass">
+          <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass">
             {ICONS.finished}
-            <span className="ilo-button__label"> Finalizado </span>
+            <span class="ilo-button__label"> Finalizado </span>
           </button>
         );
 
       default:
         return (
-          <button id={`playButton-${number}`} type="button" className="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
+          <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
             {ICONS.initial}
-            <span className="ilo-button__label">
+            <span class="ilo-button__label">
               {' '}
               {this.state.duration}
               {' '}
