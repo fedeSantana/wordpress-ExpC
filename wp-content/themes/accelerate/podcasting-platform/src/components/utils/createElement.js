@@ -1,6 +1,6 @@
 function isSVG(element) {
   const patt = new RegExp(`^${element}$`, 'i');
-  const SVGTags = ['path', 'svg', 'use', 'g'];
+  const SVGTags = ['path', 'svg', 'use', 'g', 'line', 'circle'];
   return SVGTags.some((tag) => patt.test(tag));
 }
 

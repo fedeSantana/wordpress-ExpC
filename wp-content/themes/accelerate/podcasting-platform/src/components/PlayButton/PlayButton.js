@@ -2,37 +2,27 @@ import createElement from '../utils/createElement';
 import ArcIcon from './arcIcon';
 import { PODCAST_STATE } from '../PodcastState';
 
-/**
- * @type {Element}
- * @description Object with the Icons from playButton
- */
+/** Object with the Icons from playButton */
 const ICONS = {
-  /**
-     * @type {Element}
-     * @description icono de reproducción
-     */
-  initial: (
+  /** icono de reproducción */
+  initial: () => (
     <svg class="ilo-button-icon" width="24" height="24" viewBox="0 0 24 24" aria-label="play podcast">
       <path id="arc1" fill="none" stroke="#0078D4" strokeWidth="1.82" d="M 11.841357625485093 2.911384451028404 A 9.09 9.09 0 1 0 12 2.91" />
       <path d="M15.6359 11.9998L10.1814 15.9362V8.06348L15.6359 11.9998Z" fill="#0078D4" />
-    </svg>),
-  /**
-     * @type {Element}
-     * @description Tres barras animadas que representan el sonido reproduciendosé
-     */
-  playing: (
+    </svg>
+  ),
+  /** Tres barras animadas que representan el sonido reproduciendosé */
+  playing: () => (
     <svg id="svgSound-playing0" class="svgSound-playing" height="24px" strokeWidth="4" viewBox="-12 -12 24 24">
       <g jsname="HGYFec">
         <line class="leftLine" x1="-6" x2="-6" y1="8" y2="-8" />
         <line class="middleLine" x1="0" x2="0" y1="8" y2="-8" />
         <line class="rightLine" x1="6" x2="6" y1="8" y2="-8" />
       </g>
-    </svg>),
-  /**
-     * @type {Element}
-     * @description Icono que representa al podcast finalizado
-     */
-  finished: (
+    </svg>
+  ),
+  /** Icono que representa al podcast finalizado */
+  finished: () => (
     <svg
       class="ilo-button-icon"
       width="24"
@@ -53,15 +43,16 @@ const ICONS = {
         d="M16.5 20.0852L14.765 18.3502C14.57 18.1552 14.255 18.1552 14.06 18.3502C13.865 18.5452 13.865 18.8602 14.06 19.0552L16.15 21.1452C16.345 21.3402 16.66 21.3402 16.855 21.1452L22.145 15.8552C22.34 15.6602 22.34 15.3452 22.145 15.1502C21.95 14.9552 21.635 14.9552 21.44 15.1502L16.5 20.0852Z"
         fill="#3F8F3D"
       />
-    </svg>),
+    </svg>
+  ),
   /**
-     *
-     * @param {!number} angle - angle from 0 to 359.
-     * @param {!number} size - The size of the element
-     * @param {!number} diameter - The radius of the circunference
-     *
-     * @returns {Element}
-     */
+   *
+   * @param {!number} angle angle from 0 to 359.
+   * @param {!number} size The size of the element
+   * @param {!number} diameter The diameter of the circunference
+   *
+   * @returns {JSX.Element}
+   */
   pause: (angle, size, diameter) => {
     const arc = new ArcIcon(angle, size, diameter);
     return (
@@ -88,7 +79,7 @@ export default class PlayButton {
       case PODCAST_STATE.initial:
         return (
           <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
-            {ICONS.initial}
+            {ICONS.initial()}
             <span class="ilo-button__label">
               {' '}
               {this.state.duration}
@@ -115,7 +106,7 @@ export default class PlayButton {
       case PODCAST_STATE.playing:
         return (
           <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass">
-            {ICONS.playing}
+            {ICONS.playing()}
             <span class="ilo-button__label"> reproduciendo </span>
           </button>
         );
@@ -123,7 +114,7 @@ export default class PlayButton {
       case PODCAST_STATE.finished:
         return (
           <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass">
-            {ICONS.finished}
+            {ICONS.finished()}
             <span class="ilo-button__label"> Finalizado </span>
           </button>
         );
@@ -131,7 +122,7 @@ export default class PlayButton {
       default:
         return (
           <button id={`playButton-${number}`} type="button" class="ilo-button ilo-button--outlined yourRippleEffectClass" aria-label="play podcast">
-            {ICONS.initial}
+            {ICONS.initial()}
             <span class="ilo-button__label">
               {' '}
               {this.state.duration}
