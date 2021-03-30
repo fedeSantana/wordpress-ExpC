@@ -1,6 +1,6 @@
 import { xmlParse, htmlParse } from './parser';
 import Podcasts from './Podcasts';
-import Podcast from './podcast';
+import Podcast from './podcast.vue';
 import { PODCAST_STATE } from './PodcastState';
 import Player from './player';
 
