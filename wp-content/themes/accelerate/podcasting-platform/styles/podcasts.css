@@ -508,18 +508,7 @@ podcastCard__artwork {
  }
 }
 
-/** Player
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  padding: 0 0;
-}
+/* Player */
 
 main {
   flex: 1 0 auto;
